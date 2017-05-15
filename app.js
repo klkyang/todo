@@ -1,44 +1,53 @@
+if(localStorage.getItem('localTodoList') === null) {
+  var todos = [];
+} else {
+  var todos = JSON.parse(localStorage.getItem('localTodoList'));
+}
+
 var toDoList = {
-  todos: [],
 
   addItem: function (item) {
-    this.todos.push({
+    todos.push({
       todoText: item,
       complete: false
     });
+    localStorage.setItem('localTodoList', JSON.stringify(todos));
   },
 
   change: function (position, newValue) {
-    this.todos[position].todoText = newValue;
+    todos[position].todoText = newValue;
+    localStorage.setItem('localTodoList', JSON.stringify(todos));
   },
 
   delete: function (position) {
-    this.todos.splice(position, 1);
+    todos.splice(position, 1);
+    localStorage.setItem('localTodoList', JSON.stringify(todos));
   },
 
   toggleComplete: function (position) {
-    this.todos[position].complete = !this.todos[position].complete;
+    todos[position].complete = !todos[position].complete;
+    localStorage.setItem('localTodoList', JSON.stringify(todos));
   },
 
   toggleAll: function () {
     var allTrue = true;
 
-    this.todos.forEach(function (todo) {
+    todos.forEach(function (todo) {
       if (!todo.complete) {
         allTrue = false;
       }
     });
 
-    this.todos.forEach(function (todo) {
+    todos.forEach(function (todo) {
       if (allTrue) {
         todo.complete = false;
       } else {
         todo.complete = true;
       }
     });
+    localStorage.setItem('localTodoList', JSON.stringify(todos));
   }
 };
-
 
 var handlers = {
   addTodo: function () {
@@ -83,7 +92,7 @@ var view = {
     var todosUl = document.querySelector('ul');
     todosUl.innerHTML = '';
 
-    toDoList.todos.forEach(function(todo, position) {
+    todos.forEach(function(todo, position) {
       var todoLi = document.createElement('li');
       var todoTextWithCompletion = todo.todoText;
 
@@ -129,7 +138,6 @@ var view = {
 
     function clickToggleComplete(event) {
       var elementClicked = event.target;
-      console.log(elementClicked);
       if(elementClicked.classList.contains('todoItem')) {
         handlers.toggleCompleted(parseInt(elementClicked.id))
       }
@@ -141,3 +149,4 @@ var view = {
 };
 
 view.setUpEventListeners();
+view.displayTodos();

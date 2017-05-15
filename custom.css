@@ -83,7 +83,7 @@ ul{
 .todoItem {
   display: block;
   position: relative;
-  height: 65px;
+  min-height: 65px;
   box-sizing: border-box;
   width: 100%;
   background: white;
